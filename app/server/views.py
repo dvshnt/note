@@ -55,7 +55,7 @@ def issue_view(request, id):
 		}
 		
 		setattr(current, "content", content)
-		return render(request, "nashnote/index.html", {'site': siteInfo, 'current': current, 'archive': archive})
+		return render(request, "nashnote/issue.html", {'site': siteInfo, 'current': current, 'archive': archive})
 	
 	return render(request, "index.html", {'site': siteInfo, 'archive': []})
 
