@@ -1,0 +1,199 @@
+{% extends "nashnote/base.html" %}
+	
+{% load static from staticfiles %}
+
+{% block pagetitle %}{{ site.name }} | {{ current.subject }}{% endblock %}
+
+{% block ogtitle %}{{ site.ogtitle }} | {{ current.subject }}{% endblock %}
+{% block ogimage %}http://{{ site.website.domain }}/media/{{ current.introimg }}{% endblock %}
+{% block ogurl %}http://{{ site.website.domain }}/issue/{{ current.id }}{% endblock %}
+
+
+{% block article %}
+	{% if current %}
+	<section class="article">
+		<div class="block-image">
+			<div class="overlay"></div>
+			<img src="/media/{{ current.introimg }}" alt="{{ current.subject }}" />
+			<div class="block-info">
+				<label>Week of {{ current.created_at|date:"M d, Y" }}</label>
+				<h4>{{ current.subject }}</h4>
+			</div>
+		</div>
+		<div class="block-content">
+			{% if current.content.intro %}
+			{% for i in current.content.intro %}
+				{{ i.content|safe }}
+			{% endfor %}
+			{% endif %}
+			
+			<br><br>
+			
+			{% if current.content.briefs %}
+			<h3>Weekly Briefs</h3>
+			{% for b in current.content.briefs %}
+				{{ b.content|safe }}
+			{% endfor %}
+			{% endif %}
+			
+			<br><br>
+			
+			{% if current.content.beats %}
+			<h3>Weekly Beats</h3>
+			<ol>
+			{% for b in current.content.beats %}
+				<li>{{ b.content|safe }}</li>
+			{% endfor %}
+			</ol>
+			{% endif %}
+			
+			{% if current.content.quotes %}
+			
+			<br><br>
+			<h3>Quote of the Week</h3>
+			{% for q in current.content.quotes %}
+				<blockquote>{{ q.content|safe }}</blockquote>
+				<span class="attr">{{ q.subtitle }}</span>
+			{% endfor %}
+			{% endif %}
+		</div>
+	</section>
+	{% endif %}
+{% endblock %}
+
+{% block aside %}
+	<section>
+		<form class="form" method="post" action="/v1/subscribe?ref={{ref}}">
+			{% csrf_token %} 
+			<h3>Sign Up for The Nashville Note</h3>
+			<input type="email" name="email" placeholder="Email address" required/>
+			<button type="submit" class="submit">Submit</button>
+		</form>
+		<div class="msg"></div>
+	</section>
+	{% if archive|length > 0 %}
+	<section>
+		<h3 class="block-title">Past Issues</h3>
+		<ul>
+		{% for issue in archive %}
+		<li>
+			
+			<a href="/issue/{{ issue.id }}">
+				<div class="image" style="background-image:url('/media/{{ issue.introimg }}');"></div>
+			</a>
+			
+			<label><a href="/issue/{{ issue.id }}">Week of {{ issue.created_at|date:"M d, Y" }}</a></label>
+			<h5><a href="/issue/{{ issue.id }}">{{ issue.subject }}</a></h5>
+		</li>
+		</a>
+		{% endfor %}
+		</ul>
+	</section>
+	{% endif %}
+{% endblock %}
+
+{% block footer %}
+	<span>&copy;MMXVI {{ site.name }}, Nashville, TN</span>
+	<span>
+		<a href="mailto:{{ site.email }}">Contact</a>
+	</span>
+{% endblock %}
+
+
+{% block scripts %}
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script>
+<script>
+	$(function() {
+
+		var QueryString = function () {
+		  // This function is anonymous, is executed immediately and 
+		  // the return value is assigned to QueryString!
+		  var query_string = {};
+		  var query = window.location.search.substring(1);
+		  var vars = query.split("&");
+		  for (var i=0;i<vars.length;i++) {
+		    var pair = vars[i].split("=");
+		        // If first entry with this name
+		    if (typeof query_string[pair[0]] === "undefined") {
+		      query_string[pair[0]] = decodeURIComponent(pair[1]);
+		        // If second entry with this name
+		    } else if (typeof query_string[pair[0]] === "string") {
+		      var arr = [ query_string[pair[0]],decodeURIComponent(pair[1]) ];
+		      query_string[pair[0]] = arr;
+		        // If third or later entry with this name
+		    } else {
+		      query_string[pair[0]].push(decodeURIComponent(pair[1]));
+		    }
+		  } 
+		    return query_string;
+		}();
+
+		//hang on event of form with id=myform
+		$(".form").submit(function(e) {
+			e.preventDefault();
+
+			if ($(this).hasClass("success")) return;
+
+			if (!validateEmail($(".form input[type=email]").val())) {
+				$(".msg").addClass("error");
+
+				$(".msg").html("Enter a valid email address.")
+
+				setTimeout(function() {
+					$(".msg").removeClass("error");
+					$(".msg").html("")
+				}, 5000);
+				return;
+			}
+
+			//get the action-url of the form
+			var actionurl = e.currentTarget.action;
+			var data = $(".form").serialize();
+		
+			$(".form").addClass("request");
+
+			if (QueryString.ref) {
+				data += "&ref=" + QueryString.ref;
+			}
+
+			//do your own request an handle the results
+			$.ajax({
+				url: actionurl,
+				type: 'POST',
+				dataType: 'json',
+				data: $(".form").serialize(),
+				complete: function(data) {
+					if (data.status === 200) {
+						$(".msg").html("Thanks for signing up! See you soon.");
+						$(".form input[type=email]").hide();
+						$(".form button").hide();
+						$(".msg").addClass("success");
+					}
+
+					// Already entered this eail.
+					if (data.status === 409) {
+						$(".msg").addClass("error");
+		
+						$(".msg").html("Looks like someone already signed up with this address.")
+		
+						setTimeout(function() {
+							$(".msg").removeClass("error");
+							$(".msg").html("")
+						}, 5000);
+						return;
+					}
+				}
+			});
+
+		});
+
+		function validateEmail(str) {
+			var lastAtPos = str.lastIndexOf('@');
+		    var lastDotPos = str.lastIndexOf('.');
+		    return (lastAtPos < lastDotPos && lastAtPos > 0 && str.indexOf('@@') == -1 && lastDotPos > 2 && (str.length - lastDotPos) > 2);
+		}
+
+	});
+
+</script>
+{% endblock %}
