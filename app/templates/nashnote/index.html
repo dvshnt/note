@@ -2,27 +2,6 @@
 	
 {% load static from staticfiles %}
 
-{%block header %}
-	<h1>
-		<img src="{{ site.logo.url }}"/>
-	</h1>
-	{% if site.instagram %}
-	<a href="{{ site.instagram }}" target="_blank"><svg class="icon icon-instagram"><use xlink:href="#icon-instagram"></use></svg></a>
-	{% endif %}
-
-	{% if site.facebook %}
-	<a href="{{ site.facebook }}" target="_blank"><svg class="icon icon-facebook"><use xlink:href="#icon-facebook"></use></svg></a>
-	{% endif %}
-
-	{% if site.twitter %}
-	<a href="{{ site.twitter }}" target="_blank"><svg class="icon icon-twitter"><use xlink:href="#icon-twitter"></use></svg></a>
-	{% endif %}
-
-	{% if site.youtube %}
-	<a href="{{ site.youtube }}" target="_blank"><svg class="icon icon-youtube"><use xlink:href="#icon-youtube"></use></svg></a>
-	{% endif %}
-{% endblock %}
-
 {% block main %}
 	<section>
 		<form class="form" method="post" action="/v1/subscribe?ref={{ref}}">
@@ -97,12 +76,12 @@
 		{% for issue in archive %}
 		<li>
 			
-			<a href="http://{{ site.website.domain }}/issue/{{ issue.id }}">
+			<a href="/issue/{{ issue.id }}">
 				<div class="image" style="background-image:url('/media/{{ issue.introimg }}');"></div>
 			</a>
 			
-			<label><a href="http://{{ site.website.domain }}/issue/{{ issue.id }}">Week of {{ issue.created_at|date:"M d, Y" }}</a></label>
-			<h5><a href="http://{{ site.website.domain }}/issue/{{ issue.id }}">{{ issue.subject }}</a></h5>
+			<label><a href="/issue/{{ issue.id }}">Week of {{ issue.created_at|date:"M d, Y" }}</a></label>
+			<h5><a href="/issue/{{ issue.id }}">{{ issue.subject }}</a></h5>
 		</li>
 		</a>
 		{% endfor %}

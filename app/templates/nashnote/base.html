@@ -3,7 +3,7 @@
 	<head>
 		{% load static from staticfiles %}
 
-		<title>{{ site.name }}</title>
+		<title>{% block pagetitle %}{{ site.name }}{% endblock %}</title>
 
 
 		<meta charset="utf-8">
@@ -20,20 +20,20 @@
 		
 
 		<!-- Start Facebook Open Graph -->
-		<meta property="og:title" content="{{ site.ogtitle }}"/>
+		<meta property="og:title" content="{% block ogtitle %}{{ site.ogtitle }}{% endblock %}"/>
 		<meta property="og:type" content="website"/>
-		<meta property="og:image" content="http://{{ site.website.domain }}{{ site.ogimg.url }}"/>
-		<meta property="og:url" content="http://{{ site.website.domain }}"/>
-		<meta property="og:description" content="{{ site.ogdescription }}"/>
+		<meta property="og:image" content="{% block ogimage %}http://{{ site.website.domain }}{{ site.ogimg.url }}{% endblock %}"/>
+		<meta property="og:url" content="{% block ogurl %}http://{{ site.website.domain }}{% endblock %}"/>
+		<meta property="og:description" content="{% block ogdesc %}{{ site.ogdescription }}{% endblock %}"/>
 		<!-- End Facebook Open Graph -->
 
 
 		<!-- Start Twitter Card -->
 		<meta name="twitter:card" content="summary_large_image">
-		<meta name="twitter:creator" content="@dvshnt">
-		<meta name="twitter:title" content="{{ site.ogtitle }}">
-		<meta name="twitter:description" content="{{ site.ogdescription }}"/>
-		<meta name="twitter:image" content="http://{{ site.website.domain }}{{ site.ogimg.url }}">
+		<meta name="twitter:creator" content="{% block twitterhandle %}@dvshnt{% endblock %}">
+		<meta name="twitter:title" content="{% block twittertitle %}{{ site.ogtitle }}{% endblock %}">
+		<meta name="twitter:description" content="{% block twitterdesc %}{{ site.ogdescription }}{% endblock %}"/>
+		<meta name="twitter:image" content="{% block twitterimage %}http://{{ site.website.domain }}{{ site.ogimg.url }}{% endblock %}">
 		<!-- End Twitter Card -->
 		
 		<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600|Roboto+Slab:400,700" rel="stylesheet">
@@ -87,6 +87,7 @@
 				
 				padding-left:15px;
 				padding-bottom:10px;
+				padding-top:10px;
 				border-bottom:1px solid #F8F8F8;
 			}
 			
@@ -349,7 +350,10 @@
 			section {
 				position:relative;
 				
-				padding:10px 15px;
+				padding:0 15px 10px;
+				
+				margin-bottom:10px;
+				
 				
 				background:#FFFFFF;
 				border:1px solid #F8F8F8;
@@ -369,6 +373,27 @@
 				margin:15px auto 20px;
 				
 				text-align:center;
+			}
+			
+			aside section form {
+				width:100%;
+				
+				margin:25px auto 20px;
+			}
+			
+			aside section form button {
+				margin-left:0;	
+			}
+				
+			aside section form input[type=email] {
+				box-sizing:border-box;
+				
+				margin:20px 0;
+			}
+			
+			aside section form input[type=email],
+			aside section form button {
+				width:100%;
 			}
 			
 			section .block-image {
@@ -569,6 +594,7 @@
 		</style>
 	</head>
 	<body>
+		
 		<svg style="display:none;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 			<defs>
 				<symbol id="icon-facebook" mi-view-box="0 0 1024 1024" viewBox="0 0 1024 1024">
@@ -587,8 +613,27 @@
 		</svg>
 		
 		<header>
-		{% block header %}
-		{% endblock %}
+			<div class="dev-banner" style="float:right; margin-top:17px; margin-right:15px;">You are in development mode. Click <a href="http://thenashvillenote.com">here</a> to go to production.</div>
+			{%block header %}
+				<h1>
+					<a href="/"><img src="{{ site.logo.url }}"/></a>
+				</h1>
+				{% if site.instagram %}
+				<a href="{{ site.instagram }}" target="_blank"><svg class="icon icon-instagram"><use xlink:href="#icon-instagram"></use></svg></a>
+				{% endif %}
+			
+				{% if site.facebook %}
+				<a href="{{ site.facebook }}" target="_blank"><svg class="icon icon-facebook"><use xlink:href="#icon-facebook"></use></svg></a>
+				{% endif %}
+			
+				{% if site.twitter %}
+				<a href="{{ site.twitter }}" target="_blank"><svg class="icon icon-twitter"><use xlink:href="#icon-twitter"></use></svg></a>
+				{% endif %}
+			
+				{% if site.youtube %}
+				<a href="{{ site.youtube }}" target="_blank"><svg class="icon icon-youtube"><use xlink:href="#icon-youtube"></use></svg></a>
+				{% endif %}
+			{% endblock %}
 		</header>
 
 		<div id="container">
