@@ -1,11 +1,11 @@
-*.pyc
+**/*.pyc
 
-./app/server/wsgi/nashvillenote.py
-./app/server/wsgi/bmshow.py
+app/server/wsgi/nashvillenote.py
+app/server/wsgi/bmshow.py
 
-./app/server/settings/base.py
-./app/server/settings/auth.py
-./app/server/settings/sites/bmshow.py
-./app/server/settings/sites/nashvillenote.py
+app/server/settings/base.py
+app/server/settings/auth.py
+app/server/settings/sites/bmshow.py
+app/server/settings/sites/nashvillenote.py
 
-./app/server/migrations/*
+app/server/migrations/**
