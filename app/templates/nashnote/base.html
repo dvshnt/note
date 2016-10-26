@@ -44,7 +44,7 @@
 				font-size:16px;
 				line-height:22px;
 				
-				background:#F2F2F2;
+				background:#FFFFFF;
 				font-family:'Open Sans', 'Helvetica', sans-serif;
 				
 				overflow-x:hidden;
@@ -88,7 +88,6 @@
 				padding-left:15px;
 				padding-bottom:10px;
 				padding-top:10px;
-				border-bottom:1px solid #F8F8F8;
 			}
 			
 			h4 {
@@ -270,25 +269,74 @@
 				position:fixed;
 				top:0; left:0;
 				
-				width:100%; height:60px;
+				width:100%;
 				
 				background:#ffffff;
-				border-bottom:3px solid rgba(0,0,0,0.1);
 				
 				z-index:99;
 			}
 			
+			header svg {
+				display:inline;
+				
+				margin:0 15px;
+			}
+			
+			header a:last-of-type svg {
+				margin-right:35px;
+			}
+			
+			header svg.icon-instagram {
+				width:25px; height:25px;
+			}
+			
+			header svg.icon-facebook {
+				width:25px; height:25px;
+			}
+			
+			header svg.icon-youtube {
+				position:relative;
+				top:3.75px;
+			
+				width:32.5px; height:32.5px;
+			}
+			
+			header svg.icon-instagram:hover {
+				fill:#262626
+			}
+			
+			header svg.icon-facebook:hover {
+				fill:#415893
+			}
+			
+			header svg.icon-youtube:hover {
+				fill:#BC2F2A;
+			}
+			
+			header .nav-wrap {
+				max-width: 932px;
+				width: calc(100% - (35px * 2));
+				
+				margin-top:0;
+				margin-left: auto;
+				margin-right: auto;
+				
+				border-bottom:1px solid #000000;
+			}
+			
 			header h1 {
-				line-height:60px;
+				display:inline;
+				
+				line-height:50px;
 			}
 			
 			header h1 img {
 				position:relative;
 				top:1px;
 				
-				width:auto; height:24px;
+				width:auto; height:25px;
 				
-				margin-left:15px;
+				margin-left:17px;
 			}
 			
 			footer {
@@ -313,7 +361,7 @@
 				max-width: 932px;
 				width: calc(100% - (35px * 2));
 				
-				margin-top:100px;
+				margin-top:120px;
 				margin-left: auto;
 				margin-right: auto;
 				
@@ -332,7 +380,7 @@
 				-webkit-flex:0 0 100%;
 						flex:0 0 100%;
 						
-				margin-bottom:10px;
+				margin-bottom:45px;
 			}
 			
 			article {
@@ -344,6 +392,8 @@
 				-webkit-flex:0 0 300px;
 						flex:0 0 300px;
 						
+				max-height:650px;
+						
 				margin-left:10px;
 			}
 			
@@ -354,23 +404,13 @@
 				
 				margin-bottom:10px;
 				
-				
-				background:#FFFFFF;
-				border:1px solid #F8F8F8;
-				
-				border-top: 3px solid #000;
-				border-radius: 1px;
-				box-shadow: -1px 0 2px 0 rgba(0, 0, 0, 0.05),
-							1px 0 2px 0 rgba(0, 0, 0, 0.05),
-							0 1px 1px 0 rgba(0, 0, 0, 0.15);
-				
 				border-radius:2px;
 			}
 			
 			section form {
 				width:60%;
 				
-				margin:15px auto 20px;
+				margin:25px auto 65px;
 				
 				text-align:center;
 			}
@@ -486,14 +526,16 @@
 			}
 			
 			.msg {
-				position:relative;
-				left:-16px; bottom:-18px;
+				position:absolute;
+				left:22.5%; bottom:-20px;
 				
-				width:calc(100% + 30px); height:0;
+				width:55%; height:0;
 				
 				text-align:center;
 				
-				border-radius:0 0 2px 2px;
+				margin:0 auto;
+				
+				border-radius:2px;
 				
 				-webkit-transition:0.2s height ease;				
 			}
@@ -532,19 +574,29 @@
 				#container {
 					width:95%;
 					
-					margin-top:100px;
+					margin-top:140px;
+				}
+				
+				header .nav-wrap {
+					width:95%;
+				}
+				
+				header h1 {
+					text-align:center;
+				}
+				
+				header h1 img {
+					width:60%; height:auto;
 				}
 				
 				section form {
 					width:100%;
+					
+					margin: 35px auto 35px;
 				}
 				
 				.msg {
 					font-size:14px;	
-				}
-				
-				main {
-					margin-bottom:40px;
 				}
 				
 				section form h2 {
@@ -594,6 +646,16 @@
 		</style>
 	</head>
 	<body>
+		<div id="fb-root"></div>
+		<script>
+			(function(d, s, id) {
+				var js, fjs = d.getElementsByTagName(s)[0];
+				if (d.getElementById(id)) return;
+				js = d.createElement(s); js.id = id;
+				js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.8&appId=1706363622984455";
+				fjs.parentNode.insertBefore(js, fjs);
+			}(document, 'script', 'facebook-jssdk'));
+		</script>
 		
 		<svg style="display:none;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 			<defs>
@@ -613,26 +675,18 @@
 		</svg>
 		
 		<header>
-			{%block header %}
+			<div class="nav-wrap">
+				
+				{%block header %}
 				<h1>
 					<a href="/"><img src="{{ site.logo.url }}"/></a>
 				</h1>
-				{% if site.instagram %}
-				<a href="{{ site.instagram }}" target="_blank"><svg class="icon icon-instagram"><use xlink:href="#icon-instagram"></use></svg></a>
-				{% endif %}
 			
 				{% if site.facebook %}
-				<a href="{{ site.facebook }}" target="_blank"><svg class="icon icon-facebook"><use xlink:href="#icon-facebook"></use></svg></a>
+				<div class="fb-follow" data-href="https://www.facebook.com/TheNashvilleNote" data-layout="standard" data-size="large" data-show-faces="false" style="position:relative;top:-2.5px;left:25px;"></div>
 				{% endif %}
-			
-				{% if site.twitter %}
-				<a href="{{ site.twitter }}" target="_blank"><svg class="icon icon-twitter"><use xlink:href="#icon-twitter"></use></svg></a>
-				{% endif %}
-			
-				{% if site.youtube %}
-				<a href="{{ site.youtube }}" target="_blank"><svg class="icon icon-youtube"><use xlink:href="#icon-youtube"></use></svg></a>
-				{% endif %}
-			{% endblock %}
+				{% endblock %}
+			</div>
 		</header>
 
 		<div id="container">
