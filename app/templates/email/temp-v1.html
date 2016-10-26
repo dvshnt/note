@@ -187,19 +187,39 @@
 								<tbody>
 									<tr>
 										<td valign="top">
-											<table border="0" cellpadding="0" cellspacing="0" width="100%" id="fascinatingTable" style="padding-top:35px; padding-bottom:5px;">
-												<tbody>
-													<tr>
-														<td valign="top" class="heading">
-															<div style="color: #000000;font-size: 10px;font-family: Helvetica,Arial,sans-serif;line-height: 150%; width:100%; text-align:center; font-weight:normal;"><a href="http://{{ site.domain }}">View Issue Online</a></div>
-														</td>
-													</tr>
-												</tbody>
-											</table>
+											{% if intro %}
+											<span style="display:none; visibility:hidden;">{% for i in intro %}{{ i.content|safe }}{% endfor %}</span>
+											{% endif %}
 
 											<!-- ====================================== -->
 											<!--         Begin of Email Sections        -->
 											<!-- ====================================== -->
+
+
+
+											<!-- Top Section Intro -->
+											<table border="0" cellpadding="0" cellspacing="0" width="100%" id="topStoriesTitleTable" style="padding-top: 15px; height:20px;">
+												<tbody>
+													<tr>
+														<td valign="middle" align="center" class="date">
+
+															<!-- DATE -->
+															<div style="color: #a9a9a9;font-size: 12px;font-weight:normal;font-family: Helvetica,Arial,sans-serif; float:left; display:inline;">
+															<i>{{ date }}</i>
+															</div>
+															<!-- END DATE -->
+															
+															<!-- VIEW ONLINE -->
+															<div style="color: #000000;font-size: 12px;font-family: Helvetica,Arial,sans-serif;line-height: 150%; font-weight:normal; float:right; display:inline;">
+																<a href="http://{{ site.domain }}">View Issue Online</a>
+															</div>
+															<!-- END VIEW ONLINE -->
+
+														</td>
+													</tr>
+												</tbody>
+											</table>
+											<!-- END Top Section Intro -->
 
 
 											{% if header %}
@@ -230,26 +250,6 @@
 
 
 
-											<!-- Top Section Intro -->
-											<table border="0" cellpadding="0" cellspacing="0" width="100%" id="topStoriesTitleTable" style="padding-top: 5px;">
-												<tbody>
-													<tr>
-														<td valign="middle" align="center" class="date">
-
-															<!-- DATE -->
-															<div style="color: #a9a9a9;font-size: 12px;font-weight:normal;font-family: Helvetica,Arial,sans-serif;">
-															<i>{{ date }}</i>
-															</div>
-															<!-- END DATE -->
-
-														</td>
-													</tr>
-												</tbody>
-											</table>
-											<!-- END Top Section Intro -->
-
-
-
 											<!-- Intro Image  -->
 											{% if introimg %}
 											<table border="0" cellpadding="0" cellspacing="0" width="100%" id="imageTable" mc:hideable="hideable_1" mchideable="hideable_1" style="padding-top: 20px;">
@@ -257,7 +257,7 @@
 													<tr>
 														<td valign="top" align="left">
 															<img src="http://{{ site.domain }}{{ introimg }}" alt="" border="0" style="margin: 0; padding: 0;max-width:600px;" class="imgMax"><br>
-															<label style="display:block; text-align:center; width:100%; font-size:12px; color:#999;"><span>Photo by Ferdinando Scianna, Nashville, circa 1986</span></label>
+															<label style="display:block; text-align:center; width:100%; font-size:12px; color:#999; margin-top:6px;"><span>Pedestrian Bridge post-Titan's Game, Oct. 23, 2016</span></label>
 														</td>
 													</tr>
 												</tbody>
@@ -300,7 +300,7 @@
 												<tbody>
 													<tr>
 														<td valign="top" align="left">
-															<table border="0" cellpadding="0" cellspacing="0" width="100%" id="fascinatingTable" style="padding-top:45px; padding-bottom:5px;">
+															<table border="0" cellpadding="0" cellspacing="0" width="100%" id="fascinatingTable" style="padding-top:25px; padding-bottom:5px;">
 																<tbody>
 																	<tr>
 																		<td valign="top" class="heading">
