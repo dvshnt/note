@@ -207,7 +207,7 @@ class Email(models.Model):
 			)
 
 			if response['ResponseMetadata']['HTTPStatusCode'] == 200:
-				log = EmailLog(email=self, subscriber=sub)
+				log = EmailLog(email=self, subscriber=sub, sent_at=datetime.datetime.now())
 				log.save()
 				
 
