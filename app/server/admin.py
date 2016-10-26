@@ -60,7 +60,7 @@ def email_newsletter_to_remaining(modeladmin, requst, queryset):
 	for email in emails:
 		tr = Thread(target=email.sendEmail, args=(False,True,))
 		tr.start()
-email_newsletter.short_description = "Send newsletter to those that haven't received it yet"
+email_newsletter_to_remaining.short_description = "Send newsletter to those that haven't received it yet"
 
 def email_test_newsletter(modeladmin, requst, queryset):
 	emails = list(queryset)
