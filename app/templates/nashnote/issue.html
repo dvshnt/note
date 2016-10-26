@@ -7,6 +7,14 @@
 {% block ogtitle %}{{ site.ogtitle }} | {{ current.subject }}{% endblock %}
 {% block ogimage %}http://{{ site.website.domain }}/media/{{ current.introimg }}{% endblock %}
 {% block ogurl %}http://{{ site.website.domain }}/issue/{{ current.id }}{% endblock %}
+{% block ogdesc %}
+{% if current.content.intro %}
+{% block ogdesc %}
+{% for i in current.content.intro %}
+	{{ i.content|safe }}
+{% endfor %}
+{% endblock %}
+{% endif %}
 
 
 {% block article %}
