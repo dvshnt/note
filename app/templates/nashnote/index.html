@@ -138,8 +138,10 @@
 				$(".msg").html("Enter a valid email address.")
 
 				setTimeout(function() {
-					$(".msg").removeClass("error");
-					$(".msg").html("")
+					if ($(".msg").hasClass("error")) {
+						$(".msg").removeClass("error");
+						$(".msg").html("")
+					}
 				}, 5000);
 				return;
 			}
@@ -165,6 +167,7 @@
 						$(".msg").html("Thanks for signing up! See you soon.");
 						$(".form input[type=email]").hide();
 						$(".form button").hide();
+						$(".msg").removeClass("error");
 						$(".msg").addClass("success");
 					}
 
@@ -175,8 +178,10 @@
 						$(".msg").html("Looks like someone already signed up with this address.")
 		
 						setTimeout(function() {
-							$(".msg").removeClass("error");
-							$(".msg").html("")
+							if ($(".msg").hasClass("error")) {
+								$(".msg").removeClass("error");
+								$(".msg").html("")
+							}
 						}, 5000);
 						return;
 					}
