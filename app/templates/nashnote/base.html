@@ -208,7 +208,7 @@
 			}
 			
 			button:active {
-				top:0px;
+				top:1px;
 				
 				-webkit-box-shadow:0px 2px 5px rgba(0,0,0,0.15);
 			}
@@ -527,7 +527,11 @@
 			
 			.msg {
 				position:absolute;
+<<<<<<< HEAD
 				left:22.5%; bottom:-20px;
+=======
+				left:22.5%; bottom:15px;
+>>>>>>> Styling changes to page and email template.
 				
 				width:55%; height:0;
 				
@@ -596,6 +600,9 @@
 				}
 				
 				.msg {
+					width:calc(100% - 32px);
+					left:inherit;
+					bottom:0px;
 					font-size:14px;	
 				}
 				
@@ -676,7 +683,6 @@
 		
 		<header>
 			<div class="nav-wrap">
-				
 				{%block header %}
 				<h1>
 					<a href="/"><img src="{{ site.logo.url }}"/></a>
