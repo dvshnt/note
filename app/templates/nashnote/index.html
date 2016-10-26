@@ -27,6 +27,21 @@
 				<h4>{{ current.subject }}</h4>
 			</div>
 		</div>
+		
+		{% if current.content.weather %}
+		<div class="block-weather">
+<!-- 			<p>{{ current.content.weather.summary }}</p> -->
+			{% for day in current.content.weather.days %}
+			<div class="day">
+				<label class="dow">{{ day.dow }}</label>
+				<div class="icon {{ day.icon }}"></div>
+				<span class="high">{{ day.high }} &#8457;</span>
+				<span class="low">{{ day.low }} &#8457;</span>
+			</div>
+			{% endfor %}
+		</div>
+		{% endif %}
+
 		<div class="block-content">
 			{% if current.content.intro %}
 			{% for i in current.content.intro %}
