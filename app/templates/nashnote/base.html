@@ -418,7 +418,7 @@
 			aside section form {
 				width:100%;
 				
-				margin:25px auto 20px;
+				margin:25px auto 8px;
 			}
 			
 			aside section form button {
@@ -428,13 +428,23 @@
 			aside section form input[type=email] {
 				box-sizing:border-box;
 				
-				margin:20px 0;
+				margin:20px 0 8px;
 			}
 			
 			aside section form input[type=email],
 			aside section form button {
 				width:100%;
 			}
+			
+			aside section .msg {
+				position:inherit;
+				left:0; bottom:0;
+				
+				width:100%;
+				
+				margin-bottom:20px;
+			}
+			
 			
 			section .block-image {
 				position:relative;
@@ -758,6 +768,7 @@
 		<header>
 			<div class="nav-wrap">
 				{%block header %}
+				<div style="width:100%; padding:7px 0; background:rgba(0,0,0,0.1); color:#000; font-size:12px; text-align:center;">You are currently in devolpment mode. Click <a href="http://thenashvillenote.com">here</a> to go to production.</div>
 				<h1>
 					<a href="/"><img src="{{ site.logo.url }}"/></a>
 				</h1>
