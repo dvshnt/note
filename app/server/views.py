@@ -2,8 +2,11 @@ VERSION = 'v1'
 
 import datetime
 
+from forecastiopy import *
+
 from server.models import *
 
+from django.conf import settings
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.core.validators import validate_email
@@ -13,7 +16,6 @@ from django.contrib.sites.models import Site
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-
 
 def index(request):
 	archive = []
@@ -25,7 +27,27 @@ def index(request):
 		current = archive[0]
 		archive = archive[1:]
 		
+		fio = ForecastIO.ForecastIO(settings.DS_API_KEY, latitude=settings.NASHVILLE[0], longitude=settings.NASHVILLE[1])
+		todaily = FIODaily.FIODaily(fio)
+		
+		today = datetime.datetime.now()
+		weather = {
+			"summary": todaily.summary,
+			"days": []
+		}
+		for i in xrange(0, 5):
+			dateString = today.strftime("%a %-m/%-d")
+			day = todaily.get_day(i)
+			weather['days'].append({
+				"dow":	dateString,
+				"icon": day["icon"],
+				"high":	int(round(day["apparentTemperatureMax"])),
+				"low":	int(round(day["apparentTemperatureMin"]))
+			})
+			today = today + datetime.timedelta(days=1)
+		
 		content = {
+			"weather":	weather,
 			"intro": 	EmailNote.objects.filter(email=current.id, category=1),
 			"briefs": 	EmailNote.objects.filter(email=current.id, category=2),
 			"beats": 	EmailNote.objects.filter(email=current.id, category=3),
