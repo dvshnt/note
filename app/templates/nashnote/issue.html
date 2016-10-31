@@ -11,7 +11,7 @@
 {% if current.content.intro %}
 {% block ogdesc %}
 {% for i in current.content.intro %}
-	{{ i.content|safe }}
+	{{ i.content|striptags }}
 {% endfor %}
 {% endblock %}
 {% endif %}
