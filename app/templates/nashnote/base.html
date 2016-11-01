@@ -392,8 +392,6 @@
 				-webkit-flex:0 0 300px;
 						flex:0 0 300px;
 						
-				max-height:650px;
-						
 				margin-left:10px;
 			}
 			
@@ -455,6 +453,8 @@
 				box-sizing:border-box;
 				
 				width:calc(100% + 30px);
+				
+				overflow:hidden;
 			}
 			
 			section .block-image .overlay {
@@ -552,8 +552,8 @@
 				opacity:0.8;
 			}
 			
-			section .block-weather .day .icon.partly-cloudy-night { background-position:-300px 0; }
-			section .block-weather .day .icon.partly-cloudy-day { background-position:-60px 0; }
+			section .block-weather .day .icon.partly-cloudy-night { background-position:45.3% 0; }
+			section .block-weather .day .icon.partly-cloudy-day { background-position:9% 0; }
 			
 			section .block-weather .day span {
 				position:relative;
@@ -625,7 +625,9 @@
 				
 				border-radius:2px;
 				
-				-webkit-transition:0.2s height ease;				
+				-webkit-transition:0.2s height ease;	
+				
+				background:-webkit-linear-gradient(#EB5757 100%, #D54B4B 100%);			
 			}
 			
 			.msg.error {
@@ -688,6 +690,28 @@
 					left:inherit;
 					bottom:0px;
 					font-size:14px;	
+				}
+				
+				section .block-weather {
+					width:100%;
+					
+					padding:20px 15px 10px;
+				}
+				
+				section .block-weather p {
+					font-size:12px;
+				}
+				
+				section .block-weather .day .icon {
+					width:50px; height:50px;
+					
+					background-size:auto 50px;
+					
+					opacity:0.8;
+				}
+				
+				section .block-weather .day span {
+					font-size:10px;
 				}
 				
 				section form h2 {
@@ -768,13 +792,11 @@
 		<header>
 			<div class="nav-wrap">
 				{%block header %}
-				<div style="width:100%; padding:7px 0; background:rgba(0,0,0,0.1); color:#000; font-size:12px; text-align:center;">You are currently in devolpment mode. Click <a href="http://thenashvillenote.com">here</a> to go to production.</div>
 				<h1>
 					<a href="/"><img src="{{ site.logo.url }}"/></a>
 				</h1>
-			
 				{% if site.facebook %}
-				<div class="fb-follow" data-href="https://www.facebook.com/TheNashvilleNote" data-layout="standard" data-size="large" data-show-faces="false" style="position:relative;top:-2.5px;left:25px;"></div>
+				<div class="fb-follow" data-href="https://www.facebook.com/TheNashvilleNote" data-layout="button" data-size="large" data-show-faces="false" style="position:relative;top:-2.5px;left:25px;"></div>
 				{% endif %}
 				{% endblock %}
 			</div>
