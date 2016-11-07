@@ -23,7 +23,7 @@ def index(request):
 	siteInfo = SiteInfo.objects.get(website=site)
 	
 	if site.domain == "thenashvillenote.com":
-		archive = Email.objects.filter(website=site).order_by('-created_at')
+		archive = Email.objects.filter(website=site, sent=True).order_by('-created_at')
 		current = archive[0]
 		archive = archive[1:]
 		
