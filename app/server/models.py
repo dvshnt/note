@@ -130,12 +130,17 @@ class Email(models.Model):
 		intro 	= EmailNote.objects.filter(email=email, category=1)
 		briefs 	= EmailNote.objects.filter(email=email, category=2)
 		beats 	= EmailNote.objects.filter(email=email, category=3)
+		events 	= EmailNote.objects.filter(email=email, category=6)
 		quotes	= EmailNote.objects.filter(email=email, category=5)
 		
 		pixelURL = 'http://' + site.domain + '/v1/' + email.hash_name + '/' + sub.hash_name
 		pixelURL = pixelURL.replace("=", "")
 		
-		t = loader.get_template('email/temp-v1.html')
+		if site.domain == 'thenashvillenote.com':
+			t = loader.get_template('email/nashnote/temp-v1.html')
+		else:
+			t = loader.get_template('email/temp-v1.html')
+			
 		c = Context({
 			'header':	header,
 			'sub': 		sub, 
@@ -144,6 +149,7 @@ class Email(models.Model):
 			'site': 	site,
 			'email': 	email,
 			'briefs':	briefs,
+			'events':	events,
 			'beats':	beats,
 			'siteInfo': info,
 			'date':		today,
@@ -219,6 +225,7 @@ class EmailNote(models.Model):
 		(3, 'Beat'),
 		(4, 'Poster'),
 		(5, 'Quote'),
+		(6, 'Event'),
 	)
 
 	created_at = models.DateTimeField(auto_now_add=True)
