@@ -50,6 +50,7 @@ def index(request):
 			"weather":	weather,
 			"intro": 	EmailNote.objects.filter(email=current.id, category=1),
 			"briefs": 	EmailNote.objects.filter(email=current.id, category=2),
+			"events":	EmailNote.objects.filter(email=current.id, category=6),
 			"beats": 	EmailNote.objects.filter(email=current.id, category=3),
 			"quotes":	EmailNote.objects.filter(email=current.id, category=5),
 		}
@@ -72,6 +73,7 @@ def issue_view(request, id):
 		content = {
 			"intro": 	EmailNote.objects.filter(email=current.id, category=1),
 			"briefs": 	EmailNote.objects.filter(email=current.id, category=2),
+			"events":	EmailNote.objects.filter(email=current.id, category=6),
 			"beats": 	EmailNote.objects.filter(email=current.id, category=3),
 			"quotes":	EmailNote.objects.filter(email=current.id, category=5),
 		}
@@ -80,6 +82,7 @@ def issue_view(request, id):
 		return render(request, "nashnote/issue.html", {'site': siteInfo, 'current': current, 'archive': archive})
 	
 	return render(request, "index.html", {'site': siteInfo, 'archive': []})
+	
 
 @api_view(['POST'])
 def list_subscribe(request):
