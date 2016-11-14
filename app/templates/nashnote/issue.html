@@ -37,14 +37,14 @@
 			
 			<br><br>
 			
+<!--
 			<div style="color:#606060;font-size: 16px;font-family: Helvetica,Arial,sans-serif;line-height: 150%; text-align:center; background:#f8f8f8; padding:10px 0;">
 				<span style="font-size:12px;">This week's Note brought to you by</span><br>
 				<strong style="font-size:22px;">🛠&nbsp;<a href="http://www.billfixers.com/#_a_nashvillenote" style="text-decoration:underline;">BillFixers</a>&nbsp;🛠</strong><br>
 				
 				<p style="width:80%;margin:15px auto 5px;">BillFixers is a Nashville startup that negotiates better prices for your TV, internet, and phone service. Save up to 35% on your bills at <a href="http://www.billfixers.com/#_a_nashvillenote" style="text-decoration:underline;">billfixers.com</a>.</p>
 			</div>
-			
-			<br><br>
+-->
 			
 			{% if current.content.briefs %}
 			{% for b in current.content.briefs %}
@@ -54,24 +54,24 @@
 			
 			<br><br>
 			
-			{% if current.content.events %}
-			<h3 style="color: #ff00d5;font-weight: bold;font-size: 24px;font-family: Helvetica,Arial,sans-serif;line-height: 100%;">SHOWS<br><span style="font-size:16px; color:#888888; font-weight:normal;">Where can I go to take my mind off of this madness?</span></h3>
-			<ul style="list-style:none; margin-left:0;">
-			{% for b in current.content.events %}
-				<li>{{ b.content|safe }}</li>
-			{% endfor %}
-			</ul>
-			{% endif %}
-			
-			<br><br>
-			
 			{% if current.content.beats %}
-			<h3 style="color: #0bd774;font-weight: bold;font-size: 24px;font-family: Helvetica,Arial,sans-serif;line-height: 100%;">BEATS<br><span style="font-size:16px; color:#888888; font-weight:normal;">Cool, what else is going on in Nashville?</span></h3>
+			<h3 style="color: #000000;font-weight: bold;font-size: 24px;font-family: Helvetica,Arial,sans-serif;line-height: 100%;">Beats</h3>
 			<ol>
 			{% for b in current.content.beats %}
 				<li>{{ b.content|safe }}</li>
 			{% endfor %}
 			</ol>
+			{% endif %}
+			
+			<br><br>
+			
+			{% if current.content.events %}
+			<h3 style="color: #000000;font-weight: bold;font-size: 24px;font-family: Helvetica,Arial,sans-serif;line-height: 100%;">Events</h3>
+			<ul style="list-style:none; margin-left:0;">
+			{% for b in current.content.events %}
+				{{ b.content|safe }}
+			{% endfor %}
+			</ul>
 			{% endif %}
 			
 			{% if current.content.quotes %}
