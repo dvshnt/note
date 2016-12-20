@@ -115,7 +115,7 @@ class Email(models.Model):
 		today = datetime.datetime.now()
 		
 		if site.domain == 'benandmoreyshow.com':
-			today = 'The Ben & Morey Show on October 13th'
+			today = 'Last minute Christmas gift ideas'
 			prompt = 'Know someone who might like the show?'
 		else:
 			today = 'Week of ' + today.strftime('%B %-d, %Y')
@@ -176,10 +176,7 @@ class Email(models.Model):
 		else:
 			subscribers = Subscriber.objects.filter(website=site)		
 			
-		if site.domain == 'benandmoreyshow.com':
-			subject = "This Week " + self.subject
-		else:
-			subject = self.subject
+		subject = self.subject
 		
 		if not tester:
 			self.sent = True
