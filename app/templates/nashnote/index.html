@@ -105,19 +105,18 @@
 {% block aside %}
 	{% if archive|length > 0 %}
 	<section>
-		<h3 class="block-title">Past Issues</h3>
+		<h3 class="block-title">Past Issues <a class="archive-link" href="/issues">See all...</a></h3>
 		<ul>
 		{% for issue in archive %}
 		<li>
 			
-			<a href="/issue/{{ issue.id }}">
+			<a href="/issues/{{ issue.id }}">
 				<div class="image" style="background-image:url('/media/{{ issue.introimg }}');"></div>
 			</a>
 			
-			<label><a href="/issue/{{ issue.id }}">Week of {{ issue.created_at|date:"M d, Y" }}</a></label>
-			<h5><a href="/issue/{{ issue.id }}">{{ issue.subject }}</a></h5>
+			<label><a href="/issues/{{ issue.id }}">Week of {{ issue.created_at|date:"M d, Y" }}</a></label>
+			<h5><a href="/issues/{{ issue.id }}">{{ issue.subject }}</a></h5>
 		</li>
-		</a>
 		{% endfor %}
 		</ul>
 	</section>

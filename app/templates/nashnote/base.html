@@ -90,6 +90,20 @@
 				padding-top:10px;
 			}
 			
+			
+			h3 a.archive-link {
+				float:right;
+				
+				color:#999999;
+				font-size:12px;
+			}
+			
+			h3 a.archive-link:hover {
+				color:#666666;
+				
+				text-decoration:underline;
+			}
+			
 			h4 {
 				font-size:1em; 			/* 16px */
 				line-height:1em;		/* 22px */
@@ -97,7 +111,6 @@
 			
 			p {
 				line-height:1.55;
-				text-align:justify;
 			}
 			
 			a {
@@ -127,9 +140,13 @@
 			ul li {
 				min-height: 80px;
 
-				padding: 26px 0 20px;
+				padding: 25px 0 25px;
 				
 				border-bottom:1px solid #E2E2E2;
+			}
+			
+			ul.large li {
+				min-height:105px;
 			}
 			
 			ul li:last-of-type {
@@ -149,9 +166,38 @@
 				background-repeat:no-repeat;
 			}
 			
+			ul.large li h3 a {
+				color:#222222;
+				font-size:16px;
+			}
+			
+			ul.large li h3 a:hover {
+				text-decoration:underline;	
+			}
+			
+			ul.large li .image {				
+				width:104px; height:104px !important;
+				
+				margin-right:25px;
+			}
+			
 			ul li label {
 				display:block;
 				margin-top:-10px;
+			}
+			
+			ul.large li label {
+				margin-top:0;
+				
+				color:#999999 !important;
+				font-size:12px;
+			}
+			
+			ul.large li p {
+				margin:5px 0 0;
+				
+				font-size:14px;
+				line-height:1.4;
 			}
 			
 			ul li label a {
@@ -170,6 +216,14 @@
 				font-family:'Roboto Slab', serif;
 				text-align:left;
 				line-height:16px;
+			}
+			
+			ul li h5 a:hover {
+				text-decoration:underline;	
+			}
+			
+			ul.large li .image {				
+				height:145px;
 			}
 			
 			button {
@@ -379,8 +433,10 @@
 			main {
 				-webkit-flex:0 0 100%;
 						flex:0 0 100%;
-						
-				margin-bottom:45px;
+			}
+			
+			main section {
+				padding-bottom:55px;
 			}
 			
 			article {
@@ -416,7 +472,9 @@
 			aside section form {
 				width:100%;
 				
-				margin:25px auto 8px;
+				margin:0 auto 0;
+				
+				padding:25px 0 8px;
 			}
 			
 			aside section form button {
@@ -442,7 +500,6 @@
 				
 				margin-bottom:20px;
 			}
-			
 			
 			section .block-image {
 				position:relative;
@@ -732,6 +789,15 @@
 					display:none;
 				}
 				
+				ul.large li .image {
+					width: 100%;
+					height: 104px !important;
+					margin-right: 0px;
+					margin-bottom: 8px;
+					
+					background-size:cover;
+				}
+				
 				section .block-image h4 {width: 90%;}
 			
 				section .block-content {
@@ -792,6 +858,7 @@
 		<header>
 			<div class="nav-wrap">
 				{%block header %}
+				<div style="width:100%; padding:7px 0; background:rgba(0,0,0,0.1); color:#000; font-size:12px; text-align:center;">In devolopment mode. Click <a href="http://thenashvillenote.com">here</a> to go to production.</div>
 				<h1>
 					<a href="/"><img src="{{ site.logo.url }}"/></a>
 				</h1>

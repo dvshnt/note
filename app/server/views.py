@@ -4,10 +4,12 @@ import datetime
 
 from forecastiopy import *
 
+from BeautifulSoup import BeautifulSoup
+
 from server.models import *
 
 from django.conf import settings
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import render
 from django.core.validators import validate_email
 from django.core.validators import ValidationError
@@ -23,7 +25,7 @@ def index(request):
 	siteInfo = SiteInfo.objects.get(website=site)
 	
 	if site.domain == "thenashvillenote.com":
-		archive = Email.objects.filter(website=site, sent=True).order_by('-created_at')
+		archive = Email.objects.filter(website=site, sent=True).order_by('-created_at')[:6]
 		current = archive[0]
 		archive = archive[1:]
 		
@@ -61,6 +63,28 @@ def index(request):
 	return render(request, "index.html", {'site': siteInfo, 'archive': archive})
 	
 
+def issue_archive_view(request):
+	site = Site.objects.get_current()
+	siteInfo = SiteInfo.objects.get(website=site)
+	
+	if site.domain == "thenashvillenote.com":
+		archive = Email.objects.filter(website=site, sent=True).order_by('-created_at')
+		
+		for a in archive:
+			intro = EmailNote.objects.filter(email=a.id, category=1)
+			brief = EmailNote.objects.filter(email=a.id, category=2)[0]
+			if intro:
+				preview = intro[0].content
+			elif brief:
+				preview = brief.content
+			setattr(a, "preview", preview)
+		
+		return render(request, "nashnote/archive.html", {'site': siteInfo, 'archive': archive})
+	
+	return render(request, "index.html", {'site': siteInfo, 'archive': []})
+
+
+
 def issue_view(request, id):
 	site = Site.objects.get_current()
 	siteInfo = SiteInfo.objects.get(website=site)
@@ -68,7 +92,7 @@ def issue_view(request, id):
 	if site.domain == "thenashvillenote.com":
 		current = Email.objects.get(id=id)
 	
-		archive = Email.objects.filter(website=site).order_by('-created_at')
+		archive = Email.objects.filter(website=site).order_by('-created_at')[:5]
 		
 		content = {
 			"intro": 	EmailNote.objects.filter(email=current.id, category=1),
@@ -80,6 +104,62 @@ def issue_view(request, id):
 		
 		setattr(current, "content", content)
 		return render(request, "nashnote/issue.html", {'site': siteInfo, 'current': current, 'archive': archive})
+	
+	return render(request, "index.html", {'site': siteInfo, 'archive': []})
+	
+
+def issue_test_view(request, id):
+	# If user is not logged in, don't show this page
+	if not request.user.is_authenticated():
+		raise Http404 
+	
+	
+	site = Site.objects.get_current()
+	siteInfo = SiteInfo.objects.get(website=site)
+	
+	if site.domain == "thenashvillenote.com":
+		email = Email.objects.get(id=id)
+		
+		today = datetime.datetime.now()
+		today = 'Week of ' + today.strftime('%B %-d, %Y')
+		prompt = "Know someone who needs " + siteInfo.name
+		
+		if email.introimg:
+			introimg = email.introimg.url
+		else:
+			introimg = False
+		
+		header 	= email.header
+		intro 	= EmailNote.objects.filter(email=email, category=1)
+		briefs 	= EmailNote.objects.filter(email=email, category=2)
+		beats 	= EmailNote.objects.filter(email=email, category=3)
+		events 	= EmailNote.objects.filter(email=email, category=6)
+		quotes	= EmailNote.objects.filter(email=email, category=5)
+		sub 	= Subscriber.objects.filter(email="vdh3@mac.com", website=site)
+		
+		pixelURL = ''
+		
+		t = loader.get_template('email/nashnote/temp-v1.html')
+			
+		c = Context({
+			'header':	header,
+			'sub': 		sub, 
+			'introimg':	introimg,
+			'intro':	intro,
+			'site': 	site,
+			'email': 	email,
+			'briefs':	briefs,
+			'events':	events,
+			'beats':	beats,
+			'siteInfo': siteInfo,
+			'date':		today,
+			'prompt':	prompt,
+			'pixel': 	pixelURL,
+			'quotes':	quotes
+		})
+		rendered = t.render(c)
+		
+		return HttpResponse(rendered)
 	
 	return render(request, "index.html", {'site': siteInfo, 'archive': []})
 	

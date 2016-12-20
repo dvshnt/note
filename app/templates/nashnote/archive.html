@@ -2,90 +2,26 @@
 	
 {% load static from staticfiles %}
 
-{% block pagetitle %}{{ site.name }} | {{ current.subject }}{% endblock %}
-
-{% block ogtitle %}{{ site.ogtitle }} | {{ current.subject }}{% endblock %}
-{% block ogimage %}http://{{ site.website.domain }}/media/{{ current.introimg }}{% endblock %}
-{% block ogurl %}http://{{ site.website.domain }}/issues/{{ current.id }}{% endblock %}
-
-{% if current.content.intro %}
-{% block ogdesc %}
-{% for i in current.content.intro %}
-	{{ i.content|striptags }}
-{% endfor %}
-{% endblock %}
-{% endif %}
+{% block pagetitle %}{{ site.name }} | Archive{% endblock %}
 
 
 {% block article %}
-	{% if current %}
-	<section class="article">
-		<div class="block-image">
-			<div class="overlay"></div>
-			<img src="/media/{{ current.introimg }}" alt="{{ current.subject }}" />
-			<div class="block-info">
-				<label>Week of {{ current.created_at|date:"M d, Y" }}</label>
-				<h4>{{ current.subject }}</h4>
-			</div>
-		</div>
-		<div class="block-content">
-			{% if current.content.intro %}
-			{% for i in current.content.intro %}
-				{{ i.content|safe }}
+	<section>
+		<h2>Past Issues</h2>
+		<ul class="large">
+			{% for a in archive %}
+			<li>
+				<a href="/issues/{{ a.id }}">
+					<div class="image" style="background-image:url('/media/{{ a.introimg }}');"></div>
+				</a>
+			
+				<label>Week of {{ a.created_at|date:"M d, Y" }}</label>
+				<h3><a href="/issues/{{ a.id }}">{{ a.subject }}</a></h3>
+				<p>{{ a.preview|striptags|safe|slice:"144" }}&#8230;</p>
+			</li>
 			{% endfor %}
-			{% endif %}
-			
-			<br><br>
-			
-<!--
-			<div style="color:#606060;font-size: 16px;font-family: Helvetica,Arial,sans-serif;line-height: 150%; text-align:center; background:#f8f8f8; padding:10px 0;">
-				<span style="font-size:12px;">This week's Note brought to you by</span><br>
-				<strong style="font-size:22px;">🛠&nbsp;<a href="http://www.billfixers.com/#_a_nashvillenote" style="text-decoration:underline;">BillFixers</a>&nbsp;🛠</strong><br>
-				
-				<p style="width:80%;margin:15px auto 5px;">BillFixers is a Nashville startup that negotiates better prices for your TV, internet, and phone service. Save up to 35% on your bills at <a href="http://www.billfixers.com/#_a_nashvillenote" style="text-decoration:underline;">billfixers.com</a>.</p>
-			</div>
--->
-			
-			{% if current.content.briefs %}
-			{% for b in current.content.briefs %}
-				{{ b.content|safe }}
-			{% endfor %}
-			{% endif %}
-			
-			<br><br>
-			
-			{% if current.content.beats %}
-			<h3 style="color: #000000;font-weight: bold;font-size: 24px;font-family: Helvetica,Arial,sans-serif;line-height: 100%;">Beats</h3>
-			<ol>
-			{% for b in current.content.beats %}
-				<li>{{ b.content|safe }}</li>
-			{% endfor %}
-			</ol>
-			{% endif %}
-			
-			<br><br>
-			
-			{% if current.content.events %}
-			<h3 style="color: #000000;font-weight: bold;font-size: 24px;font-family: Helvetica,Arial,sans-serif;line-height: 100%;">Events</h3>
-			<ul style="list-style:none; margin-left:0;">
-			{% for b in current.content.events %}
-				{{ b.content|safe }}
-			{% endfor %}
-			</ul>
-			{% endif %}
-			
-			{% if current.content.quotes %}
-			
-			<br><br>
-			<h3>Quote of the Week</h3>
-			{% for q in current.content.quotes %}
-				<blockquote>{{ q.content|safe }}</blockquote>
-				<span class="attr">{{ q.subtitle }}</span>
-			{% endfor %}
-			{% endif %}
-		</div>
+		</ul>
 	</section>
-	{% endif %}
 {% endblock %}
 
 {% block aside %}
@@ -93,29 +29,12 @@
 		<form class="form" method="post" action="/v1/subscribe?ref={{ref}}">
 			{% csrf_token %} 
 			<h3>Sign Up for The Nashville Note</h3>
+			<p style="text-align:left; font-size:14px;">We cover local news, politics, real estate developments, new restaurants, buildings, cool places, events, and concerts.</p>
 			<input type="email" name="email" placeholder="Email address" required/>
 			<button type="submit" class="submit">Submit</button>
 		</form>
 		<div class="msg"></div>
 	</section>
-	{% if archive|length > 0 %}
-	<section>
-		<h3 class="block-title">Past Issues <a class="archive-link" href="/issues">See all...</a></h3>
-		<ul>
-		{% for issue in archive %}
-		<li>
-			
-			<a href="/issues/{{ issue.id }}">
-				<div class="image" style="background-image:url('/media/{{ issue.introimg }}');"></div>
-			</a>
-			
-			<label><a href="/issues/{{ issue.id }}">Week of {{ issue.created_at|date:"M d, Y" }}</a></label>
-			<h5><a href="/issues/{{ issue.id }}">{{ issue.subject }}</a></h5>
-		</li>
-		{% endfor %}
-		</ul>
-	</section>
-	{% endif %}
 {% endblock %}
 
 {% block footer %}

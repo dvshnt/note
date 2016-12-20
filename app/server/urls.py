@@ -19,7 +19,9 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
 
     # ## user actions
-    url(r'^issue/(?P<id>\d+)$', views.issue_view, name='view issue'),
+    url(r'^issues$', views.issue_archive_view, name='view issue'),
+    url(r'^issues/(?P<id>\d+)$', views.issue_view, name='view issue'),
+    url(r'^issues/test/(?P<id>\d+)$', views.issue_test_view, name='view test issue'),
     
     url(r'^v1/subscribe$', views.list_subscribe, name='list subscribe'),
     url(r'^v1/unsubscribe/(?P<hash>\w+)$', views.list_unsubscribe, name='list unsubscribe'),
