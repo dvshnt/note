@@ -20,6 +20,7 @@ urlpatterns = [
 
     # ## user actions
     url(r'^issues$', views.issue_archive_view, name='view issue'),
+    url(r'^issue/(?P<id>\d+)$', views.issue_view, name='view issue'),
     url(r'^issues/(?P<id>\d+)$', views.issue_view, name='view issue'),
     url(r'^issues/test/(?P<id>\d+)$', views.issue_test_view, name='view test issue'),
     
