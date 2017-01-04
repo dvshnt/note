@@ -95,8 +95,8 @@ class EmailNoteInline(admin.TabularInline):
 
 class EmailAdmin(admin.ModelAdmin):
 	list_filter = ('website',)
-	list_display = ['id', 'subject','get_recipient_count','get_open_rate','sent']
-	fields = ('subject','header','introimg','author','website',)
+	list_display = ['id', 'subject','get_recipient_count','get_open_rate','get_total_link_clicks','sent']
+	fields = ('subject','header','headline','introimg','introimgtext','author','website',)
 	actions = [email_newsletter, email_test_newsletter, email_newsletter_to_remaining]
 	inlines = [EmailNoteInline]
 	
@@ -117,6 +117,11 @@ class EmailAdmin(admin.ModelAdmin):
 			return "N/A"
 		return sent
 	get_recipient_count.short_description = 'Recipients'
+	
+	def get_total_link_clicks(self, obj):
+		clicked = EmailLinkLog.objects.filter(link__email=obj).count()
+		return clicked
+	get_total_link_clicks.short_description = 'Total Number of Link Clicks'
 		
 	def get_open_rate(self, obj):
 		opened = EmailLog.objects.filter(email=obj, opened_at__isnull=False, subscriber__is_test=False).count()
@@ -135,7 +140,7 @@ class EmailAdmin(admin.ModelAdmin):
 class SubAdmin(admin.ModelAdmin):
 	list_filter = ('website','is_test',)
 	list_display = ['email','get_received_count','get_open_rate','website',]
-	fields = ('email','website','is_test')
+	fields = ('email','website','is_test',)
 
 	def get_received_count(self, obj):
 		received = EmailLog.objects.filter(subscriber=obj).count()
@@ -151,15 +156,21 @@ class SubAdmin(admin.ModelAdmin):
 		
 		return str(round((float(opened) / float(received)) * 100, 2)) + "%"
 	get_open_rate.short_description = 'Open Rate'
+	
+	
+class EmailLinksAdmin(admin.ModelAdmin):
+	list_filter = ('email',)
+	list_display = ['email','url','get_num_clicks']
+	fields = ('email','url',)
+	
+	def get_num_clicks(self, obj):
+		clicked = EmailLinkLog.objects.filter(link=obj).count()
+		return clicked
+	get_num_clicks.short_description = 'Number of Clicks'
 
-
-class EmailLogsAdmin(admin.ModelAdmin):
-	list_filter = ('email', 'subscriber',)
-	list_display = ['email','subscriber','sent_at','opened_at',]
-	fields = ('email','subscriber','stats','sent_at','opened_at',)
 	
 admin.site.register(Email,EmailAdmin)
-admin.site.register(EmailLog,EmailLogsAdmin)
+admin.site.register(EmailLink,EmailLinksAdmin)
 admin.site.register(Author,AuthorAdmin)
 admin.site.register(Subscriber,SubAdmin)
 admin.site.register(SiteInfo,SiteInfoAdmin)

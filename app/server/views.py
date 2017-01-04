@@ -1,5 +1,7 @@
 VERSION = 'v1'
 
+import re
+
 import datetime
 
 from forecastiopy import *
@@ -108,6 +110,14 @@ def issue_view(request, id):
 	return render(request, "index.html", {'site': siteInfo, 'archive': []})
 	
 
+
+def replaceLinks(subscriber, notes):
+	for n in notes:
+		n.content = re.sub(r'(?<=href=(\"|\'))([^\"\']+)(?=\"|\')', r'http://thenashvillenote.com/link/' + re.escape(subscriber.hash_name) + r'/' + re.escape(n.email.hash_name) + r'?url=\2', n.content)
+	return notes
+
+
+
 def issue_test_view(request, id):
 	# If user is not logged in, don't show this page
 	if not request.user.is_authenticated():
@@ -126,16 +136,18 @@ def issue_test_view(request, id):
 		
 		if email.introimg:
 			introimg = email.introimg.url
+			introimgtext = email.introimgtext
 		else:
 			introimg = False
 		
+		sub 	= Subscriber.objects.get(email="vdh3@mac.com", website=site)
+		
 		header 	= email.header
-		intro 	= EmailNote.objects.filter(email=email, category=1)
-		briefs 	= EmailNote.objects.filter(email=email, category=2)
-		beats 	= EmailNote.objects.filter(email=email, category=3)
-		events 	= EmailNote.objects.filter(email=email, category=6)
-		quotes	= EmailNote.objects.filter(email=email, category=5)
-		sub 	= Subscriber.objects.filter(email="vdh3@mac.com", website=site)
+		headline = email.headline
+		intro 	= replaceLinks(sub, EmailNote.objects.filter(email=email, category=1))
+		briefs 	= replaceLinks(sub, EmailNote.objects.filter(email=email, category=2))
+		beats 	= replaceLinks(sub, EmailNote.objects.filter(email=email, category=3))
+		events 	= replaceLinks(sub, EmailNote.objects.filter(email=email, category=6))
 		
 		pixelURL = ''
 		
@@ -143,8 +155,10 @@ def issue_test_view(request, id):
 			
 		c = Context({
 			'header':	header,
+			'headline':	headline,
 			'sub': 		sub, 
 			'introimg':	introimg,
+			'introimgtext': introimgtext,
 			'intro':	intro,
 			'site': 	site,
 			'email': 	email,
@@ -152,10 +166,8 @@ def issue_test_view(request, id):
 			'events':	events,
 			'beats':	beats,
 			'siteInfo': siteInfo,
-			'date':		today,
 			'prompt':	prompt,
-			'pixel': 	pixelURL,
-			'quotes':	quotes
+			'pixel': 	pixelURL
 		})
 		rendered = t.render(c)
 		
@@ -163,6 +175,20 @@ def issue_test_view(request, id):
 	
 	return render(request, "index.html", {'site': siteInfo, 'archive': []})
 	
+
+	
+def track_link_click(request, sub_hash, email_hash):
+	url = request.GET.get('url', '')
+	
+	subscriber = Subscriber.objects.get(hash_name=sub_hash)
+	email = Email.objects.get(hash_name=email_hash)
+	
+	link, created = EmailLink.objects.get_or_create(url=url, email=email)
+	
+	linklog, created = EmailLinkLog.objects.get_or_create(link=link, subscriber=subscriber)
+	
+	return redirect(url)
+
 
 @api_view(['POST'])
 def list_subscribe(request):
@@ -189,6 +215,7 @@ def list_subscribe(request):
 	return Response()
 
 
+
 @api_view(['GET'])
 def list_unsubscribe(request, hash):
 	try:
@@ -200,6 +227,7 @@ def list_unsubscribe(request, hash):
 		print 'no sub found with hash '+hash
 
 	return HttpResponse("Successfully unsubscribed. Come back some time.")
+
 
 
 @api_view(['GET'])

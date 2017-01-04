@@ -23,6 +23,8 @@ urlpatterns = [
     url(r'^issues/(?P<id>\d+)$', views.issue_view, name='view issue'),
     url(r'^issues/test/(?P<id>\d+)$', views.issue_test_view, name='view test issue'),
     
+    url(r'^link/(?P<sub_hash>\w+)/(?P<email_hash>\w+)$', views.track_link_click, name='track link click'),
+    
     url(r'^v1/subscribe$', views.list_subscribe, name='list subscribe'),
     url(r'^v1/unsubscribe/(?P<hash>\w+)$', views.list_unsubscribe, name='list unsubscribe'),
     url(r'^v1/(?P<hash>\w+)/(?P<track_id>\w+)$', views.track_open, name='track open'),

@@ -1,3 +1,4 @@
+import re
 import os
 import string
 import random
@@ -9,6 +10,7 @@ from django.db import models
 from django.conf import settings
 from django.dispatch import receiver
 from django.template import loader, Context
+from django.shortcuts import redirect
 from django.utils.translation import ugettext as _
 from django.db.models.signals import pre_save
 from django.contrib.sites.models import Site
@@ -99,8 +101,10 @@ class Email(models.Model):
 	subject = models.CharField(max_length=255)
 	
 	header = models.BooleanField(default=False, help_text="Show logo at top of email?")
+	headline = models.CharField(max_length=255, blank=False, default=None)
 	
 	introimg = models.ImageField(upload_to='img/covers/', default=None, blank=True)
+	introimgtext = models.CharField(max_length=512, default=None, blank=True)
 
 	hash_name =  models.CharField(unique=True,max_length=255,blank=True,editable=False)
 	
@@ -111,27 +115,34 @@ class Email(models.Model):
 	author = models.ForeignKey(Author, default=1)
 				
 	
+	
+	def replaceLinks(subscriber, notes):
+		for n in notes:
+			n.content = re.sub(r'(?<=href=(\"|\'))([^\"\']+)(?=\"|\')', r'http://thenashvillenote.com/link/' + re.escape(subscriber.hash_name) + r'/' + re.escape(n.email.hash_name) + r'?url=\2', n.content)
+		return notes
+	
+	
 	def renderTemplate(self, email, site, info, sub, header=True):
 		today = datetime.datetime.now()
 		
 		if site.domain == 'benandmoreyshow.com':
-			today = 'Last minute Christmas gift ideas'
 			prompt = 'Know someone who might like the show?'
 		else:
-			today = 'Week of ' + today.strftime('%B %-d, %Y')
 			prompt = "Know someone who needs " + info.name
 		
 		if email.introimg:
 			introimg = email.introimg.url
+			introimgtext = email.introimgtext
 		else:
 			introimg = False
+			introimgtext = ""
 		
 		header 	= self.header
-		intro 	= EmailNote.objects.filter(email=email, category=1)
-		briefs 	= EmailNote.objects.filter(email=email, category=2)
-		beats 	= EmailNote.objects.filter(email=email, category=3)
-		events 	= EmailNote.objects.filter(email=email, category=6)
-		quotes	= EmailNote.objects.filter(email=email, category=5)
+		headline = self.headline
+		intro 	= self.replaceLinks(sub, EmailNote.objects.filter(email=email, category=1))
+		briefs 	= self.replaceLinks(sub, EmailNote.objects.filter(email=email, category=2))
+		beats 	= self.replaceLinks(sub, EmailNote.objects.filter(email=email, category=3))
+		events 	= self.replaceLinks(sub, EmailNote.objects.filter(email=email, category=6))
 		
 		pixelURL = 'http://' + site.domain + '/v1/' + email.hash_name + '/' + sub.hash_name
 		pixelURL = pixelURL.replace("=", "")
@@ -143,8 +154,10 @@ class Email(models.Model):
 			
 		c = Context({
 			'header':	header,
+			'headline': headline,
 			'sub': 		sub, 
 			'introimg':	introimg,
+			'introimgtext': introimgtext,
 			'intro':	intro,
 			'site': 	site,
 			'email': 	email,
@@ -152,10 +165,8 @@ class Email(models.Model):
 			'events':	events,
 			'beats':	beats,
 			'siteInfo': info,
-			'date':		today,
 			'prompt':	prompt,
-			'pixel': 	pixelURL,
-			'quotes':	quotes
+			'pixel': 	pixelURL
 		})
 		rendered = t.render(c)
 		
@@ -176,7 +187,10 @@ class Email(models.Model):
 		else:
 			subscribers = Subscriber.objects.filter(website=site)		
 			
-		subject = self.subject
+		if site.domain == 'benandmoreyshow.com':
+			subject = "This Week " + self.subject
+		else:
+			subject = self.subject
 		
 		if not tester:
 			self.sent = True
@@ -244,6 +258,16 @@ class EmailNote(models.Model):
 
 
 
+class EmailLink(models.Model):
+	def __unicode__(self):
+		return self.url
+	
+	url = models.URLField(verbose_name="Link URL", blank=False)
+	
+	email = models.ForeignKey(Email)
+	
+
+
 class Subscriber(models.Model):
 	def __unicode__ (self):
 		return self.email
@@ -273,6 +297,19 @@ class Subscriber(models.Model):
 	
 
 
+class EmailLinkLog(models.Model):
+	clicked_at = models.DateTimeField(blank=True)
+	
+	link = models.ForeignKey(EmailLink)
+	subscriber = models.ForeignKey(Subscriber)
+	
+	def save(self, force_insert=False, force_update=False, using=None):
+		if not self.id:
+			self.clicked_at = datetime.datetime.today()
+		super(EmailLinkLog, self).save()
+
+
+
 class EmailLog(models.Model):
 
 	sent_at = models.DateTimeField(blank=False)
@@ -282,7 +319,7 @@ class EmailLog(models.Model):
 	subscriber = models.ForeignKey(Subscriber, blank=True)
 	stats = jsonfield.JSONField(blank=True)
 
-	def save(self):
+	def save(self, force_insert=False, force_update=False, using=None):
 		if not self.id:
-			self.sent_at = datetime.date.today()
+			self.sent_at = datetime.datetime.today()
 		super(EmailLog, self).save()

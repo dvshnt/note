@@ -202,7 +202,7 @@
 
 															<!-- DATE -->
 															<div style="color: #a9a9a9;font-size: 12px;font-weight:normal;font-family: Helvetica,Arial,sans-serif; float:left; display:inline;">
-															<i>{{ date }}</i>
+															<i>{{ headline }}</i>
 															</div>
 															<!-- END DATE -->
 															
@@ -254,7 +254,7 @@
 													<tr>
 														<td valign="top" align="left">
 															<img src="http://{{ site.domain }}{{ introimg }}" alt="" border="0" style="margin: 0; padding: 0;max-width:600px;" class="imgMax"><br>
-															<label style="display:block; text-align:center; width:100%; font-size:12px; color:#999; margin-top:6px;font-family: Helvetica,Arial,sans-serif;"><span>Some of the ONE MILLION lights at Cheekwood's Holiday exhibition.</span></label>
+															<label style="display:block; text-align:center; width:100%; font-size:12px; color:#999; margin-top:6px;font-family: Helvetica,Arial,sans-serif;"><span>{{ introimgtext }}</span></label>
 														</td>
 													</tr>
 												</tbody>
@@ -427,65 +427,6 @@
 
 
 
-											
-
-
-
-											<!-- Quote Section -->
-											{% if quotes|length > 0 %}
-											<table border="0" cellpadding="0" cellspacing="0" width="100%" id="quoteWrapperTable" mc:hideable="hideable_3" mchideable="hideable_3" style="border-top: 1px solid #000000;">
-												<tbody>
-													<tr>
-														<td valign="top" align="left">
-															<table border="0" cellpadding="0" cellspacing="0" width="100%" id="quoteTitleTable" style="padding-top: 15px;padding-bottom: 35px;">
-																<tbody>
-																	<tr>
-																		<td valign="top" class="heading">
-																			<div style="color: #000000;font-weight: bold;font-size: 21px;font-family: Helvetica,Arial,sans-serif;line-height: 150%;">
-																				Quote of the Week
-																			</div>
-																		</td>
-																	</tr>
-																</tbody>
-															</table>
-															{% for quote in quotes %}
-															<table border="0" cellpadding="0" cellspacing="0" width="100%" id="quoteTable" style="padding-bottom: 50px;">
-																<tbody>
-																	<tr>
-																		<td valign="top">
-																			<table border="0" cellpadding="0" cellspacing="0" width="100%">
-																				<tbody>
-																					<tr>
-																						<td valign="top" class="quote" style="padding-bottom: 20px;">
-																							<div style="color: #000000;font-size: 36px;font-family: Helvetica,Arial,sans-serif;line-height: 109%;">
-																								{{ quote.content|safe }}
-																							</div>
-																						</td>
-																					</tr>
-																					<tr>
-																						<td valign="top" class="standardText">
-																							<div style="color: #000000;font-size: 16px;font-family: Helvetica,Arial,sans-serif;line-height: 150%;">
-																								–  {{ quote.subtitle }}<br>
-																								&nbsp;
-																							</div>
-																						</td>
-																					</tr>
-																				</tbody>
-																			</table>
-																		</td>
-																	</tr>
-																</tbody>
-															</table>
-															{% endfor %}
-														</td>
-													</tr>
-												</tbody>
-											</table>
-											{% endif %}
-											<!-- END Quote Section -->
-
-
-
 											<!-- Share Nudge -->
 											<table border="0" cellpadding="0" cellspacing="0" width="100%" id="likeTable" style="border-top: 1px solid #000000;padding-top: 25px;padding-bottom: 25px;">
 												<tbody>
@@ -512,28 +453,6 @@
 												</tbody>
 											</table>
 											<!-- END Share Nudge -->
-
-
-
-											<!-- Author Information -->
-											{% if not email.author %}
-											<table border="0" cellpadding="0" cellspacing="0" width="100%" id="authorTable" style="border-top: 1px solid #000000;padding-top: 45px;padding-bottom: 40px;">
-												<tbody>
-													<tr>
-														<td valign="top" align="left" id="avatar" class="hideSmall" style="padding-right: 30px;">
-															<img src="http://{{ site.domain }}{{ email.author.img.url }}" alt="" border="0" style="margin: 0; padding: 0;" widht="100px" height="100px">
-														</td>
-														<td valign="top" align="left" class="standardText">
-															<div style="color: #000000;font-size: 16px;font-family: Helvetica,Arial,sans-serif;line-height: 150%;">
-																{{ email.author.bio }}
-																– {{ email.author.name }}
-															</div>
-														</td>
-													</tr>
-												</tbody>
-											</table>
-											{% endif %}
-											<!-- END Author Information -->
 
 
 
