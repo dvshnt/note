@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		{% load static from staticfiles %}
+		{% load string_contains %}
 
 		<title>{% block pagetitle %}{{ site.name }}{% endblock %}</title>
 
@@ -519,9 +520,9 @@
 				top:0; right:0;
 				bottom:0; left:0;
 				
-				background: -moz-linear-gradient(top, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.9) 85%); /* FF3.6-15 */
-				background: -webkit-linear-gradient(top, rgba(0,0,0,0.1) 0%,rgba(0,0,0,0.9) 85%); /* Chrome10-25,Safari5.1-6 */
-				background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%,rgba(0,0,0,0.9) 85%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+				background: -moz-linear-gradient(top, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.9) 95%); /* FF3.6-15 */
+				background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.9) 95%); /* Chrome10-25,Safari5.1-6 */
+				background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.9) 95%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 				filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#000000',GradientType=0 );
 				
 				z-index:8;
@@ -858,6 +859,10 @@
 		<header>
 			<div class="nav-wrap">
 				{%block header %}
+				
+				{% if request.build_absolute_uri|contains:'dev' %}
+				<div style="width:100%; padding:7px 0; background:rgba(0,0,0,0.1); color:#000; font-size:12px; text-align:center;">In devolopment mode. Click <a href="http://thenashvillenote.com">here</a> to go to production.</div>
+				{% endif %}
 				
 				<h1>
 					<a href="/"><img src="{{ site.logo.url }}"/></a>
