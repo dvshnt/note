@@ -187,10 +187,7 @@ class Email(models.Model):
 		else:
 			subscribers = Subscriber.objects.filter(website=site)		
 			
-		if site.domain == 'benandmoreyshow.com':
-			subject = "This Week " + self.subject
-		else:
-			subject = self.subject
+		subject = self.subject
 		
 		if not tester:
 			self.sent = True
