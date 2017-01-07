@@ -116,7 +116,7 @@ class Email(models.Model):
 				
 	
 	
-	def replaceLinks(subscriber, notes):
+	def replaceLinks(self, subscriber, notes):
 		for n in notes:
 			n.content = re.sub(r'(?<=href=(\"|\'))([^\"\']+)(?=\"|\')', r'http://thenashvillenote.com/link/' + re.escape(subscriber.hash_name) + r'/' + re.escape(n.email.hash_name) + r'?url=\2', n.content)
 		return notes
